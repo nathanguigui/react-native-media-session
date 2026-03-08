@@ -2516,6 +2516,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/slider@npm:^5.0.1":
+  version: 5.1.2
+  resolution: "@react-native-community/slider@npm:5.1.2"
+  checksum: 10c0/e48f0ad72292ca30d63b84a6c0137bb3531516c22a8a3bd1981132f25e3195c19757da271d5b8b1d66d73882ccef02a0cf21c3a99f23144623345c4eaa67823c
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.83.0":
   version: 0.83.0
   resolution: "@react-native/assets-registry@npm:0.83.0"
@@ -7956,18 +7963,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nitrogen@npm:^0.35.0":
-  version: 0.35.0
-  resolution: "nitrogen@npm:0.35.0"
+"nitrogen@npm:^0.33.0":
+  version: 0.33.9
+  resolution: "nitrogen@npm:0.33.9"
   dependencies:
     chalk: "npm:^5.3.0"
-    react-native-nitro-modules: "npm:^0.35.0"
+    react-native-nitro-modules: "npm:^0.33.9"
     ts-morph: "npm:^27.0.0"
     yargs: "npm:^18.0.0"
     zod: "npm:^4.0.5"
   bin:
     nitrogen: lib/index.js
-  checksum: 10c0/cd5c99ee544acf71a9c5d0514c75ecea1765ccdef91624c70c0a9c86acd146728e02ed2572969211d225bcc87f628e1ed85047a607c8c9e5b949a56525208b93
+  checksum: 10c0/c84a61e3e83595bf1259474bdf07de61931207a1d1382a55ced198550fd9ddd2a4edbf94039a033b6646f6e8e5182d5462868d044c641867fa3366e01db78e5c
   languageName: node
   linkType: hard
 
@@ -8883,7 +8890,8 @@ __metadata:
     react-native: "npm:0.83.0"
     react-native-builder-bob: "npm:^0.40.13"
     react-native-monorepo-config: "npm:^0.3.3"
-    react-native-nitro-modules: "npm:^0.35.0"
+    react-native-nitro-modules: "npm:^0.33.0"
+    react-native-nitro-sound: "npm:^0.2.10"
   languageName: unknown
   linkType: soft
 
@@ -8902,19 +8910,19 @@ __metadata:
     eslint: "npm:^9.35.0"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-prettier: "npm:^5.5.4"
-    nitrogen: "npm:^0.35.0"
+    nitrogen: "npm:^0.33.0"
     prettier: "npm:^2.8.8"
     react: "npm:19.2.0"
     react-native: "npm:0.83.0"
     react-native-builder-bob: "npm:^0.40.13"
-    react-native-nitro-modules: "npm:^0.35.0"
+    react-native-nitro-modules: "npm:^0.33.0"
     release-it: "npm:^19.0.4"
     turbo: "npm:^2.5.6"
     typescript: "npm:^5.9.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-    react-native-nitro-modules: ^0.35.0
+    react-native-nitro-modules: ^0.33.0
   languageName: unknown
   linkType: soft
 
@@ -8928,13 +8936,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:^0.35.0":
-  version: 0.35.0
-  resolution: "react-native-nitro-modules@npm:0.35.0"
+"react-native-nitro-modules@npm:^0.33.0, react-native-nitro-modules@npm:^0.33.9":
+  version: 0.33.9
+  resolution: "react-native-nitro-modules@npm:0.33.9"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/3e1360081b0b9b6fc315f062a65d48dc5398ca03effdf8869c00dce808ddd320a3fe1869077784c86c3b9dd3d500cb6fd84e0d0b07a73ecbe1598fb800a4b0bb
+  checksum: 10c0/1784fb51abbca6f82d792134055352c42a3bafb3450fc326b04f3cea092126ab1c9ebf152fc0ca43130c46f1537996b06ff33e644a576b03eb97f4413f5c76c3
+  languageName: node
+  linkType: hard
+
+"react-native-nitro-sound@npm:^0.2.10":
+  version: 0.2.10
+  resolution: "react-native-nitro-sound@npm:0.2.10"
+  dependencies:
+    "@react-native-community/slider": "npm:^5.0.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-nitro-modules: "*"
+  checksum: 10c0/78a7a842d8d371a965edee81698de3e63b8d9e48cb92a8b2d5735adeb21780931ab26eab1bc4245f965772f7dd17749e5441106117faf67fedd6922f50d42785
   languageName: node
   linkType: hard
 
