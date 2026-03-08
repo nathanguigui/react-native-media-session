@@ -1,0 +1,17 @@
+{
+  "cxxNamespace": ["mediasession"],
+  "ios": {
+    "iosModuleName": "MediaSession"
+  },
+  "android": {
+    "androidNamespace": ["mediasession"],
+    "androidCxxLibName": "mediasession"
+  },
+  "autolinking": {
+    "MediaSession": {
+      "swift": "MediaSession",
+      "kotlin": "MediaSession"
+    }
+  },
+  "ignorePaths": ["node_modules"]
+}
