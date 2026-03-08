@@ -45,7 +45,18 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "media-session",
+    "now-playing",
+    "lock-screen",
+    "media-controls",
+    "media-notification",
+    "nitro-modules",
+    "control-center",
+    "MPNowPlayingInfoCenter",
+    "MediaSessionCompat",
+    "audio",
+    "music"
   ],
   "repository": {
     "type": "git",
