@@ -1,9 +1,6 @@
 import { NitroModules } from 'react-native-nitro-modules';
-import type { MediaSession } from './MediaSession.nitro';
+import type { MediaSession as MediaSessionType } from './MediaSession.nitro';
+export type { NowPlayingInfo, PlaybackState } from './MediaSession.nitro';
 
-const MediaSessionHybridObject =
-  NitroModules.createHybridObject<MediaSession>('MediaSession');
-
-export function multiply(a: number, b: number): number {
-  return MediaSessionHybridObject.multiply(a, b);
-}
+export const MediaSession =
+  NitroModules.createHybridObject<MediaSessionType>('MediaSession');

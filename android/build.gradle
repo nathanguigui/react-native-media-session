@@ -115,4 +115,6 @@ android {
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation project(":react-native-nitro-modules")
+  implementation "androidx.media:media:1.7.0"
+  implementation "androidx.core:core-ktx:1.13.1"
 }

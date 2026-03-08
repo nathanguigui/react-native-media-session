@@ -1,2 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <application>
+        <provider
+            android:name=".MediaSessionInitializer"
+            android:authorities="${applicationId}.mediasession.init"
+            android:exported="false" />
+    </application>
 </manifest>
