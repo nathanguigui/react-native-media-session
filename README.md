@@ -4,6 +4,12 @@ Expose native media controls (iOS Lock Screen / Control Center, Android MediaSty
 
 Designed to coexist with any audio library — just wire up the remote commands to your player of choice.
 
+<p align="center">
+  <img src="docs/assets/ios.png" alt="iOS Lock Screen" width="250" />
+  <img src="docs/assets/dynamic_island.png" alt="iOS Dynamic Island" width="250" />
+  <img src="docs/assets/android.jpg" alt="Android Notification" width="250" />
+</p>
+
 ## Requirements
 
 - React Native >= 0.76 (New Architecture)
