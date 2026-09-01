@@ -194,24 +194,48 @@ class MediaSession : HybridMediaSessionSpec() {
         playListeners.add(callback)
     }
 
+    override fun removeOnRemotePlay() {
+        playListeners.clear()
+    }
+
     override fun onRemotePause(callback: () -> Unit) {
         pauseListeners.add(callback)
+    }
+    
+    override fun removeOnRemotePause() {
+        pauseListeners.clear()
     }
 
     override fun onRemoteStop(callback: () -> Unit) {
         stopListeners.add(callback)
     }
+    
+    override fun removeOnRemoteStop() {
+        stopListeners.clear()
+    }
 
     override fun onRemoteNextTrack(callback: () -> Unit) {
         nextListeners.add(callback)
+    }
+    
+    override fun removeOnRemoteNextTrack() {
+        nextListeners.clear()
     }
 
     override fun onRemotePreviousTrack(callback: () -> Unit) {
         previousListeners.add(callback)
     }
+    
+    override fun removeOnRemotePreviousTrack() {
+        previousListeners.clear()
+    }
 
     override fun onRemoteSeek(callback: (Double) -> Unit) {
         seekListeners.add(callback)
+    }
+    
+    override fun removeOnRemoteSeek() {
+        seekListeners.clear()
     }
 
     private fun showNotification() {
