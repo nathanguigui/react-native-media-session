@@ -143,25 +143,43 @@ class MediaSession: HybridMediaSessionSpec {
     func onRemotePlay(callback: @escaping () -> Void) throws {
         playListeners.append(callback)
     }
+    func removeOnRemotePlay() throws {
+        playListeners.removeAll()
+    }
 
     func onRemotePause(callback: @escaping () -> Void) throws {
         pauseListeners.append(callback)
+    }
+    func removeOnRemotePause() throws {
+        pauseListeners.removeAll()
     }
 
     func onRemoteStop(callback: @escaping () -> Void) throws {
         stopListeners.append(callback)
     }
+    func removeOnRemoteStop() throws {
+        stopListeners.removeAll()
+    }
 
     func onRemoteNextTrack(callback: @escaping () -> Void) throws {
         nextListeners.append(callback)
+    }
+    func removeOnRemoteNextTrack() throws {
+        nextListeners.removeAll()
     }
 
     func onRemotePreviousTrack(callback: @escaping () -> Void) throws {
         previousListeners.append(callback)
     }
+    func removeOnRemotePreviousTrack() throws {
+        previousListeners.removeAll()
+    }
 
     func onRemoteSeek(callback: @escaping (_ position: Double) -> Void) throws {
         seekListeners.append(callback)
+    }
+    func removeOnRemoteSeek() throws {
+        seekListeners.removeAll()
     }
 
     // MARK: - Artwork Loading

@@ -28,4 +28,10 @@ export interface MediaSession
   onRemoteNextTrack(callback: () => void): void;
   onRemotePreviousTrack(callback: () => void): void;
   onRemoteSeek(callback: (position: number) => void): void;
+  removeOnRemotePlay(): void;
+  removeOnRemotePause(): void;
+  removeOnRemoteStop(): void;
+  removeOnRemoteNextTrack(): void;
+  removeOnRemotePreviousTrack(): void;
+  removeOnRemoteSeek(): void;
 }
