@@ -1,7 +1,9 @@
 package com.margelo.nitro.mediasession
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,7 +16,6 @@ import com.facebook.proguard.annotations.DoNotStrip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
@@ -25,11 +26,37 @@ class MediaSession : HybridMediaSessionSpec() {
 
     companion object {
         private const val CHANNEL_ID = "media_session_channel"
-        private const val NOTIFICATION_ID = 1
+        internal const val NOTIFICATION_ID = 1
         private var appContext: Context? = null
+
+        // Shared with MediaPlaybackService
+        internal var activeSession: MediaSessionCompat? = null
+        internal var pendingNotification: Notification? = null
 
         fun setContext(context: Context) {
             appContext = context.applicationContext
+        }
+
+        internal fun createNotificationChannel(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    CHANNEL_ID,
+                    "Media Playback",
+                    NotificationManager.IMPORTANCE_LOW
+                ).apply {
+                    description = "Media playback controls"
+                }
+                val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                manager.createNotificationChannel(channel)
+            }
+        }
+
+        internal fun buildPlaceholderNotification(context: Context): Notification {
+            createNotificationChannel(context)
+            return NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setContentTitle("")
+                .build()
         }
     }
 
@@ -86,20 +113,7 @@ class MediaSession : HybridMediaSessionSpec() {
             })
             isActive = true
         }
-    }
-
-    private fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Media Playback",
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = "Media playback controls"
-            }
-            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
-        }
+        activeSession = mediaSession
     }
 
     override fun updateNowPlaying(info: NowPlayingInfo) {
@@ -172,22 +186,20 @@ class MediaSession : HybridMediaSessionSpec() {
         mediaSession?.isActive = false
         mediaSession?.release()
         mediaSession = null
+        activeSession = null
+        pendingNotification = null
         currentMetadata = null
         currentState = null
         currentArtwork = null
 
-        playListeners.clear()
-        pauseListeners.clear()
-        stopListeners.clear()
-        nextListeners.clear()
-        previousListeners.clear()
-        seekListeners.clear()
+        // Listeners and scope are kept: they are registered once at app start,
+        // and the session is recreated on the next updateNowPlaying.
+
+        MediaPlaybackService.stop()
 
         val context = getContext()
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancel(NOTIFICATION_ID)
-
-        scope.cancel()
     }
 
     override fun onRemotePlay(callback: () -> Unit) {
@@ -218,9 +230,20 @@ class MediaSession : HybridMediaSessionSpec() {
         val context = getContext()
         val session = mediaSession ?: return
 
-        val isPlaying = currentState?.state == PlaybackStateCompat.STATE_PLAYING
+        val isPlaying = currentState?.state == PlaybackStateCompat.STATE_PLAYING ||
+                currentState?.state == PlaybackStateCompat.STATE_BUFFERING
+
+        // Tapping the notification brings the app back
+        val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+        val contentIntent = launchIntent?.let {
+            PendingIntent.getActivity(
+                context, 0, it,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setContentIntent(contentIntent)
             .setSmallIcon(android.R.drawable.ic_media_play)
             .setContentTitle(currentMetadata?.getString(MediaMetadataCompat.METADATA_KEY_TITLE) ?: "")
             .setContentText(currentMetadata?.getString(MediaMetadataCompat.METADATA_KEY_ARTIST) ?: "")
@@ -270,8 +293,15 @@ class MediaSession : HybridMediaSessionSpec() {
             )
         )
 
-        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(NOTIFICATION_ID, builder.build())
+        val notification = builder.build()
+        if (isPlaying) {
+            MediaPlaybackService.startForeground(context, notification)
+        } else {
+            pendingNotification = notification
+            val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.notify(NOTIFICATION_ID, notification)
+            MediaPlaybackService.demote()
+        }
     }
 
     private suspend fun loadBitmap(source: String): Bitmap? = withContext(Dispatchers.IO) {

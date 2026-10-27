@@ -42,7 +42,9 @@ npm install react-native-media-session react-native-nitro-modules
 
 ### Android setup
 
-The library declares `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_MEDIA_PLAYBACK` permissions in its own manifest — they are merged automatically.
+The library declares `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_MEDIA_PLAYBACK` permissions, a `mediaPlayback` foreground service and a `MediaButtonReceiver` in its own manifest — they are merged automatically.
+
+The foreground service is what keeps your app alive while audio plays in background. Your player should still hold a wake lock so playback survives screen off (e.g. `MediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)` with the `WAKE_LOCK` permission).
 
 If targeting Android 13+ (API 33), your app must request the `POST_NOTIFICATIONS` runtime permission to display the media notification:
 
@@ -149,7 +151,7 @@ Update the playback state and position. Call this regularly (e.g. from a playbac
 
 ### `reset()`
 
-Clear all metadata, disable remote commands, and remove the notification (Android).
+Clear all metadata, remove the notification and stop the foreground service (Android). Registered remote command listeners are kept, so you don't need to register them again after a reset.
 
 ### Remote command listeners
 
@@ -176,7 +178,9 @@ Register callbacks for lock screen / notification controls. Multiple callbacks c
 
 - Uses `MediaSessionCompat` with `NotificationCompat.MediaStyle`
 - Creates a notification channel "Media Playback" (Android 8+)
-- Notification includes previous / play-pause / next action buttons
+- Notification includes previous / play-pause / next action buttons; tapping it opens the app
+- While `playing` or `buffering`, a `mediaPlayback` foreground service keeps the process alive in background. On `paused` it leaves the foreground but keeps the notification; on `reset()` it stops
+- Swiping the app away from recents triggers the `onRemoteStop` listeners and stops the service
 - Artwork loaded asynchronously via `HttpURLConnection` (remote URL) or `BitmapFactory.decodeFile` (local path)
 - Context is initialized automatically via a `ContentProvider` — no manual setup needed
 

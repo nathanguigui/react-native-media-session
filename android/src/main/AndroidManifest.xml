@@ -7,5 +7,24 @@
             android:name=".MediaSessionInitializer"
             android:authorities="${applicationId}.mediasession.init"
             android:exported="false" />
+
+        <!-- Keeps the process alive while audio plays in background -->
+        <service
+            android:name=".MediaPlaybackService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
+
+        <!-- Required by MediaButtonReceiver.buildMediaButtonPendingIntent (notification actions) -->
+        <receiver
+            android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
