@@ -48,7 +48,7 @@ export default function App() {
   const playingRef = useRef(false);
   const elapsedRef = useRef(0);
   const durationSent = useRef(false);
-  const trackRef = useRef(TRACKS[0]);
+  const trackRef = useRef(TRACKS[0]!);
 
   const updateNowPlaying = useCallback(
     (track: (typeof TRACKS)[number], dur: number, pos: number) => {
