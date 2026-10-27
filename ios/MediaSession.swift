@@ -113,7 +113,8 @@ class MediaSession: HybridMediaSessionSpec {
     func updatePlaybackState(state: PlaybackState, elapsedTime: Double, speed: Double) throws {
         var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = state == .playing ? speed : 0.0
+        let isActive = state == .playing || state == .buffering
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isActive ? speed : 0.0
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 
@@ -121,21 +122,6 @@ class MediaSession: HybridMediaSessionSpec {
 
     func reset() throws {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
-
-        let commandCenter = MPRemoteCommandCenter.shared()
-        commandCenter.playCommand.isEnabled = false
-        commandCenter.pauseCommand.isEnabled = false
-        commandCenter.stopCommand.isEnabled = false
-        commandCenter.nextTrackCommand.isEnabled = false
-        commandCenter.previousTrackCommand.isEnabled = false
-        commandCenter.changePlaybackPositionCommand.isEnabled = false
-
-        playListeners.removeAll()
-        pauseListeners.removeAll()
-        stopListeners.removeAll()
-        nextListeners.removeAll()
-        previousListeners.removeAll()
-        seekListeners.removeAll()
     }
 
     // MARK: - Listener Registration
